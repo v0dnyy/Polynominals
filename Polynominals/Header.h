@@ -19,7 +19,7 @@ private:
 	};
 	Coefficients* head;
 public:
-	Polynomials(size_t size) {
+	Polynomials(int size) {
 		n = size;
 		head = nullptr;
 		Coefficients* pointer = head;
@@ -37,12 +37,14 @@ public:
 			}
 		}
 	}
-	void operator [](int index) {
-		if (index >= n) throw "Invalid index";
-		for (int i = 0; i < index; i++) head = head->next;
+	double operator [](int index) {
+		if (index > n) throw "Invalid index";
+		Coefficients* tmp = head;
+		for (int i = 0; i < index; i++) tmp = tmp->next;
+		return tmp->value;
 	}
 	void SetCoefficient(double NewValue, int degree) {
-		if (degree > n) throw "Invaled index";
+		if (degree > n || degree<0)  throw "Invaled index";
 		Coefficients* tmp = head;
 		Coefficients* new_head = head;
 		for (int i = 0; i < degree; i++) {
