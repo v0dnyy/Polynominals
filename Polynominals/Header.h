@@ -24,7 +24,7 @@ public:
 		n = size;
 		head = nullptr;
 		Coefficients* pointer = head;
-		for (size_t i = 0; i < size + 1; i++) {
+		for (int i = 0; i < size + 1; i++) {
 			if (head == nullptr) {
 				head = new Coefficients;
 				head->degree = i;
@@ -44,7 +44,7 @@ public:
 		for (int i = 0; i < index; i++) tmp = tmp->next;
 		return tmp->value;
 	}
-	T SetCoefficient(T NewValue, int degree) {
+	void SetCoefficient(T NewValue, int degree) {
 		if (degree > n || degree < 0)  throw "Invaled index";
 		Coefficients* tmp = head;
 		Coefficients* new_head = head;
@@ -54,7 +54,7 @@ public:
 		tmp->value = NewValue;
 		head = new_head;
 	}
-	T SetDegree(size_t NewDegree) {
+	void SetDegree(size_t NewDegree) {
 		if (NewDegree < 0) throw "Invalid degree";
 		n = NewDegree;
 	}
@@ -181,9 +181,9 @@ public:
 	}
 	T Result(T x) {
 		Coefficients* tmp = head;
-		T res = 0;
+		T res=0;
 		for (int i = 0; i < n + 1; i++) {
-			res += tmp->value * pow(x, i);
+			res += tmp->value * (T)pow(x, i);
 			tmp = tmp->next;
 		}
 		return res;
@@ -195,8 +195,7 @@ public:
 		Coefficients* pointer = polynomial.head;
 		pointer = pointer->next;
 		for (int i = 1; i < polynomial.n + 1; i++) {
-			if (pointer->value < 0) std::cout << pointer->value << "*x^" << i;
-			else std::cout << "+" << pointer->value << "*x^" << i;
+			std::cout << "+(" << pointer->value << "*x^" << i<<")";
 			pointer = pointer->next;
 		}
 		return std::cout;
