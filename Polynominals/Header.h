@@ -4,13 +4,14 @@
 #include <stdlib.h>
 #include <math.h>
 
+template <typename T>
 class Polynomials {
 private:
 	int n;
 	struct Coefficients
 	{
 		int degree = 0;
-		double value;
+		T value;
 		struct Coefficients* next;
 		Coefficients() {
 			this->value = 1;
@@ -19,7 +20,7 @@ private:
 	};
 	Coefficients* head;
 public:
-	Polynomials(int size) {
+	Polynomials<T>(int size) {
 		n = size;
 		head = nullptr;
 		Coefficients* pointer = head;
@@ -37,14 +38,14 @@ public:
 			}
 		}
 	}
-	double operator [](int index) {
+	T operator [](int index) {
 		if (index > n) throw "Invalid index";
 		Coefficients* tmp = head;
 		for (int i = 0; i < index; i++) tmp = tmp->next;
 		return tmp->value;
 	}
-	void SetCoefficient(double NewValue, int degree) {
-		if (degree > n || degree<0)  throw "Invaled index";
+	T SetCoefficient(T NewValue, int degree) {
+		if (degree > n || degree < 0)  throw "Invaled index";
 		Coefficients* tmp = head;
 		Coefficients* new_head = head;
 		for (int i = 0; i < degree; i++) {
@@ -53,13 +54,13 @@ public:
 		tmp->value = NewValue;
 		head = new_head;
 	}
-	void SetDegree(size_t NewDegree) {
+	T SetDegree(size_t NewDegree) {
 		if (NewDegree < 0) throw "Invalid degree";
 		n = NewDegree;
 	}
-	Polynomials operator +(Polynomials& rhs) {
+	Polynomials<T> operator +(Polynomials<T>& rhs) {
 		if (this->n > rhs.n) {
-			Polynomials result(this->n);
+			Polynomials<T> result(this->n);
 			Coefficients* ptr = this->head;
 			Coefficients* rhs_ptr = rhs.head;
 			Coefficients* res_prt = result.head;
@@ -77,7 +78,7 @@ public:
 			this->head = result.head;
 		}
 		if (this->n == rhs.n) {
-			Polynomials result(this->n);
+			Polynomials<T> result(this->n);
 			Coefficients* ptr = this->head;
 			Coefficients* rhs_ptr = rhs.head;
 			Coefficients* res_prt = result.head;
@@ -90,7 +91,7 @@ public:
 			this->head = result.head;
 		}
 		if (this->n < rhs.n) {
-			Polynomials result(rhs.n);
+			Polynomials<T> result(rhs.n);
 			Coefficients* ptr = this->head;
 			Coefficients* rhs_ptr = rhs.head;
 			Coefficients* res_prt = result.head;
@@ -108,13 +109,13 @@ public:
 			this->head = result.head;
 			this->n = result.n;
 		}
-		Polynomials result(this->n);
+		Polynomials<T> result(this->n);
 		result.head = this->head;
 		return result;
 	}
-	Polynomials operator -(Polynomials& rhs) {
+	Polynomials<T> operator -(Polynomials<T>& rhs) {
 		if (this->n > rhs.n) {
-			Polynomials result(this->n);
+			Polynomials<T> result(this->n);
 			Coefficients* ptr = this->head;
 			Coefficients* rhs_ptr = rhs.head;
 			Coefficients* res_prt = result.head;
@@ -132,7 +133,7 @@ public:
 			this->head = result.head;
 		}
 		if (this->n == rhs.n) {
-			Polynomials result(this->n);
+			Polynomials<T> result(this->n);
 			Coefficients* ptr = this->head;
 			Coefficients* rhs_ptr = rhs.head;
 			Coefficients* res_prt = result.head;
@@ -145,7 +146,7 @@ public:
 			this->head = result.head;
 		}
 		if (this->n < rhs.n) {
-			Polynomials result(rhs.n);
+			Polynomials<T> result(rhs.n);
 			Coefficients* ptr = this->head;
 			Coefficients* rhs_ptr = rhs.head;
 			Coefficients* res_prt = result.head;
@@ -163,12 +164,12 @@ public:
 			this->head = result.head;
 			this->n = result.n;
 		}
-		Polynomials result(this->n);
+		Polynomials<T> result(this->n);
 		result.head = this->head;
 		return result;
 	}
-	Polynomials operator *(double scalar) {
-		Polynomials result(n);
+	Polynomials <T> operator *(T scalar) {
+		Polynomials<T> result(n);
 		Coefficients* copy = head;
 		Coefficients* copyres = result.head;
 		for (int i = 0; i < n + 1; i++) {
@@ -178,16 +179,16 @@ public:
 		}
 		return result;
 	}
-	double Result(double x) {
+	T Result(T x) {
 		Coefficients* tmp = head;
-		double res = 0;
+		T res = 0;
 		for (int i = 0; i < n + 1; i++) {
 			res += tmp->value * pow(x, i);
 			tmp = tmp->next;
 		}
 		return res;
 	}
-	friend std::ostream& operator << (std::ostream& out, const Polynomials& polynomial) {
+	friend std::ostream& operator << (std::ostream& out, const Polynomials<T>& polynomial) {
 		std::cout.setf(std::ios::fixed);
 		std::cout.precision(2);
 		std::cout << polynomial.head->value << "*x^" << 0;
@@ -201,4 +202,3 @@ public:
 		return std::cout;
 	}
 };
-
